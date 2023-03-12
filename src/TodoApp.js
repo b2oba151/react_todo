@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './Todo.css';
 export default class TodoApp extends Component {
     constructor(props) {
         super(props)
@@ -36,25 +37,39 @@ export default class TodoApp extends Component {
         // console.log(e.target.value);
         this.setState({ input: e.target.value })
     }
+
+    getUndone = ()=>{
+        let undome = this.state.items.filter(item =>{
+            return !item.done
+        })
+        if(!undome.length) {return}
+        return undome.length
+    }
     render() {
         return (<div className="container"><br />
             <div className="row">
                 <div className="col-md-6">
-                    List Undone
-                    <form onSubmit={(e) => { e.preventDefault(); this.add() }}>
-                        <input placeholder="add too" value={this.state.input} onChange={(e) => this.handlerChange(e)} />
-                    </form>
-                    <ul>
-                        {
-                            this.state.items.map(item => {
-                                if (!item.done) {
-                                    return (<li key={item.key} onClick={() => this.move(item.key)}>{item.text}</li>)
-                                }
-                            })
-                        }
-                    </ul>
+                    <div className="todolist">
+                        List Undone
+                        <form onSubmit={(e) => { e.preventDefault(); this.add() }}>
+                            <input placeholder="add todo" className="form-control form-control-lg" value={this.state.input} onChange={(e) => this.handlerChange(e)} />
+                        </form>
+                        <ul>
+                            {
+                                this.state.items.map(item => {
+                                    if (!item.done) {
+                                        return (<li key={item.key} onClick={() => this.move(item.key)}>{item.text}</li>)
+                                    }
+                                })
+                            }
+                        </ul>
+                        <div className="todo-footer">
+                            <span >{this.getUndone()}</span> Items restants
+                        </div>
+                    </div>
                 </div>
                 <div className="col-md-6">
+                    <div className="todolist">
                     List done
                     <ul>
                         {
@@ -66,6 +81,7 @@ export default class TodoApp extends Component {
                         }
                     </ul>
                 </div>
+            </div>
             </div>
         </div>)
     }
